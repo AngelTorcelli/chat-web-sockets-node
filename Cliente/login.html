@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        display: grid;
+        place-content: center;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        grid-template-rows: 1fr;
+        background-color: #202020;
+        color: #fafafa;
+        padding: 36px 36px 100px 36px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 40vh;
+        background-color: #16796f;
+        color: #fafafa;
+        padding: 4rem;
+        border-radius: 10px;
+      }
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+      input {
+        padding: 5px;
+        margin-bottom: 10px;
+        outline: 0;
+        border: 0;
+        border-radius: 5px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #fafafa;
+        border: 0;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #578984;
+        color: #fafafa;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #343495;
+        color: #fafafa;
+      }
+      a {
+        text-decoration: none;
+        color: #f2f2f2;
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      a:hover {
+        color: #162079;
+      }
+    </style>
+    <script type="module">
+      document.getElementById("form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const password = document.getElementById("password").value;
+        if (name && password) {
+          try {
+            const response = await fetch("http://localhost:3000/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include", // Asegura que las cookies se envíen y acepten
+              body: JSON.stringify({ nombre: name, password: password }),
+            });
+            const data = await response.json();
+
+            if (data.token) {
+              console.log("Login exitoso");
+              window.location.href = "/mensajes";
+            } else {
+              console.log("Login fallido");
+              alert("Login fallido");
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <form id="form">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" />
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" />
+      <button id="submit">Enviar</button>
+      <a href="/registro">👉 Registrarse 👈</a>
+    </form>
+  </body>
+</html>
